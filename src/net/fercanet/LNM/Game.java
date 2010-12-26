@@ -298,7 +298,7 @@ public class Game extends Activity {
 	    			saveUserScore(new Score(points, name, date));
 	    			
 		        	Intent intent = new Intent();
-		        	intent.setClassName("net.fercanet.LNM", "net.fercanet.LNM.Menu");
+		        	intent.setClassName("net.fercanet.LNM", "net.fercanet.LNM.MainMenu");
 		        	startActivity(intent);
 	    		}
 	    	});
@@ -306,7 +306,7 @@ public class Game extends Activity {
 	    	playername.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 	    		public void onClick(DialogInterface dialog, int whichButton) {
 	    			Intent intent = new Intent();
-	    			intent.setClassName("net.fercanet.LNM", "net.fercanet.LNM.Menu");
+	    			intent.setClassName("net.fercanet.LNM", "net.fercanet.LNM.MainMenu");
 	    			startActivity(intent);
 	    		}
 	        });
@@ -322,7 +322,7 @@ public class Game extends Activity {
     		playername.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
         	           public void onClick(DialogInterface dialog, int id) {
         	        	   Intent intent = new Intent();
-        	        	   intent.setClassName("net.fercanet.LNM", "net.fercanet.LNM.Menu");
+        	        	   intent.setClassName("net.fercanet.LNM", "net.fercanet.LNM.MainMenu");
         	        	   startActivity(intent);
         	           }
         	       });
@@ -341,7 +341,7 @@ public class Game extends Activity {
     	dlgbuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
     	           public void onClick(DialogInterface dialog, int id) {
     	        	   Intent intent = new Intent();
-    	        	   intent.setClassName("net.fercanet.LNM", "net.fercanet.LNM.Menu");
+    	        	   intent.setClassName("net.fercanet.LNM", "net.fercanet.LNM.MainMenu");
     	        	   startActivity(intent);
     	           }
     	       });
@@ -359,7 +359,7 @@ public class Game extends Activity {
 				chrono.stop();
 				if (omt==true) {
 					Intent intent = new Intent();
-					intent.setClassName("net.fercanet.LNM", "net.fercanet.LNM.Menu");
+					intent.setClassName("net.fercanet.LNM", "net.fercanet.LNM.MainMenu");
 					startActivity(intent);
 				}
 				else showTrainingEndDialog();
