@@ -16,19 +16,23 @@
     <string name="fa">fa</string>
     <string name="la">la</string>
     <string name="endgame">End Game</string>
+    <string name="save">Save</string>
     <string name="quit">Quit</string>
+    <string name="back">Back</string>
     <string name="pointsh">Points</string>
     <string name="playernameh">Name</string>
     <string name="dateh">Date</string>
     <string name="notation">Notation Style</string>
     <string name="classic">Classic</string>
     <string name="letters">Letters</string>
-    <string name="hofentries">Number of top scores in hall of fame</string>
+    <string name="separator">———</string>
+    <string name="hofentries">Hall of fame Entries</string>
+    <string name="hofentriestext">Max number of top scores stored in hall of fame</string>
     <string-array name="hofentries_array">
-        <item>10</item>
-        <item>20</item>
-        <item>50</item>
-        <item>100</item>
+        <item id="1">10</item>
+        <item id="2">20</item>
+        <item id="3">50</item>
+        <item id="4">100</item>
     </string-array>
     
 </resources>

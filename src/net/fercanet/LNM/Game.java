@@ -36,6 +36,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.*;
@@ -45,6 +46,7 @@ import android.widget.Chronometer.*;
 
 
 // Class to store the score and user name pairs
+/*
 class Score implements Comparable<Score> {
     int score;
     String name;
@@ -55,22 +57,26 @@ class Score implements Comparable<Score> {
         this.name = name;
         this.date = date;
     }
+    
 
     @Override
     public int compareTo(Score o) {
         return score < o.score ? -1 : score > o.score ? 1 : 0;
     }
 }
-
+*/
 
 // Main Class
 public class Game extends Activity {
 	
-	String notes[]={"don_1","re_1","mi_1","fa_1","sol_1","la_1","si_1","don_2","re_2","mi_2","fa_2","sol_2","la_2","si_2"};
-	int notesbt[]={R.id.don,R.id.re,R.id.mi,R.id.fa,R.id.sol,R.id.la,R.id.si};
+	String notes[]={"sol_0","la_0","si_0","don_1","re_1","mi_1","fa_1","sol_1","la_1","si_1","don_2","re_2","mi_2","fa_2","sol_2","la_2","si_2"};
+	int notesbt[]={R.id.re,R.id.si,R.id.mi,R.id.sol,R.id.don,R.id.fa,R.id.la};
+	String btclassictext[]={"re","si","mi","sol","do","fa","la"};
+	String btlettertext[]={"D","B","E","G","C","F","A"};
+	
 	int prevnotenum;
 	int correct, fail;
-	int scoresnum = 20;   // scores showed in hall of fame
+//	long scoresnum;   // scores showed in hall of fame
 	boolean omt;
 	long elapsedtime;
 	int countdown;
@@ -82,6 +88,7 @@ public class Game extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game); 
+        
         omt = this.getIntent().getExtras().getBoolean("omt");
         if (savedInstanceState != null){                              // game activity has been restarted by a runtime change (orientation change)
         	correct = savedInstanceState.getInt("correct");
@@ -95,7 +102,7 @@ public class Game extends Activity {
         	if (omt==true) {countdown = 61;}
         	else {elapsedtime = SystemClock.elapsedRealtime();}
         }
-        clickListenersInitialization();
+        buttonsInitialization();
         chrono = (Chronometer) findViewById(R.id.chrono);
         chrono.setOnChronometerTickListener(ChronometerTickListener);
         chrono.setBase(elapsedtime); 
@@ -104,13 +111,19 @@ public class Game extends Activity {
     }
     
     
-    // Set the OnClick Listeners for all the buttons
-    private void clickListenersInitialization() {
+    // Set the OnClick Listeners and the text for all the buttons
+    private void buttonsInitialization() {
         Button bt;
         int x;
         
         for (x=0;x<notesbt.length;x++) {
         	bt = (Button) findViewById(notesbt[x]);
+        	Preferences prefs = new Preferences(this);
+        	if (prefs.notationstyle.equals("letters")) {
+        			bt.setText(btlettertext[x]);		
+        	} else if (prefs.notationstyle.equals("classic")) {
+        			bt.setText(btclassictext[x]);
+        	}
         	bt.setOnClickListener(ClickListener);
         }
         	
@@ -143,7 +156,7 @@ public class Game extends Activity {
     // Randomly gets and show the next note
     private void showNextNote() {
     	Random randomGen = new Random();
-    	int notenum = randomGen.nextInt(12);
+    	int notenum = randomGen.nextInt(17);
     	while (notenum == prevnotenum) { notenum = randomGen.nextInt(12);}
     	prevnotenum = notenum;
     	String note = notes[notenum];
@@ -154,7 +167,7 @@ public class Game extends Activity {
         setRedBackgroundToAllBtExceptThis(notebt);
     }
     
-    
+ /*   
     // Returns the file content in a string
     public String getStringFromFile(String file){
     	FileInputStream fis;
@@ -172,8 +185,8 @@ public class Game extends Activity {
 		}
 		return strContent.toString();
     }
-      
-  
+   */   
+ /* 
     // Is this score in the top scores?
     public Boolean isInTheTopScores(Integer userscore) {
       
@@ -200,8 +213,8 @@ public class Game extends Activity {
         }
         else return true;    
     }
-    
-    
+   */ 
+ /*   
     // Save the score list to halloffame file
     private void saveListInFile(List<Score> scores){
     	
@@ -243,8 +256,9 @@ public class Game extends Activity {
  			e.printStackTrace();
  		}
     }
-    
-    
+    */
+   
+    /*
     // Save the new user score into the file maintaining the score order (inverse, top scores up)
     private void saveUserScore(Score userscore) {
       
@@ -267,6 +281,36 @@ public class Game extends Activity {
         
         saveListInFile(scores);    
     }
+    */
+    /*
+    // Reload scores list 
+    public void reloadScores() {
+      
+		List<Score> scores = new ArrayList<Score>();
+        
+        String filecontent = getStringFromFile("halloffame");      // This file is formated in this way: user1,score1;user2,score2;user3,score3; ...
+        
+        if (filecontent != "") {
+	        String scoresarray[] = filecontent.split(";");             // Split the string in "user,score" strings into an array
+	        
+	        for (int i=0; i<scoresarray.length; i++){  	               // Loop Through the scorearray, split user and score pairs and add them to the list
+	        	String scorearray[];
+	        	scorearray = scoresarray[i].split(",");  
+	        	scores.add(new Score(Integer.parseInt(scorearray[0]), scorearray[1], scorearray[2]));
+	        }
+        }
+        
+        Collections.sort(scores);
+        
+        saveListInFile(scores);    
+    }
+    */
+    
+    
+    // ToFix dirty trick because i can't call Utils.saveuserScore directly from public void onclick because the context is no the same.
+    public void saveUserScoreCall(Score userscore) {
+    	Utils.saveUserScore(userscore, this);
+    }
     
     
     // Show the end dialog, save the score (only if is in topX) and return to game menu 
@@ -276,9 +320,11 @@ public class Game extends Activity {
 
     	int points = correct-fail;
     	
-    	if (isInTheTopScores(points)){
+    	if (Utils.isInTheTopScores(points,this)){
+    		
+    		Preferences prefs = new Preferences(this); 
    	
-	    	playername.setMessage( correct + " correct notes and " + fail + " fails in one minute test. \n \n Congratulations you are in top "+scoresnum+" scores! \n \n Please, insert your name:"); 
+	    	playername.setMessage( correct + " correct notes and " + fail + " fails in one minute test. \n \n Congratulations you are in top "+prefs.scoresnum+" scores! \n \n Please, insert your name:"); 
 	    	playername.setIcon(R.drawable.dialog);
 	    	playername.setTitle("Results");
 	    	playername.setView(input);
@@ -288,14 +334,14 @@ public class Game extends Activity {
 	    			
 	    			String name = input.getText().toString().trim();
 	    			if (name.length()>12)  name = name.substring(0, 12);                                // 12 chars max.
-	    	        name = name.replaceAll(",", "");                             // avoiding presence of "," and ";" cause is the char used to separate entries in the file (name1,score1;name2,score2;...)
+	    	        name = name.replaceAll(",", "");                             // avoiding presence of "," and ";" because is the char used to separate entries in the file (name1,score1;name2,score2;...)
 	    	        name = name.replaceAll(";", "");
 	    			int points = correct-fail;
 	    			Calendar cal = Calendar.getInstance();
 	    		    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
 	    		    String date = sdf.format(cal.getTime());
 	    			
-	    			saveUserScore(new Score(points, name, date));
+	    			saveUserScoreCall(new Score(points, name, date));
 	    			
 		        	Intent intent = new Intent();
 		        	intent.setClassName("net.fercanet.LNM", "net.fercanet.LNM.MainMenu");
@@ -357,7 +403,7 @@ public class Game extends Activity {
 			{
 			case R.id.endgame:
 				chrono.stop();
-				if (omt==true) {
+				if (omt == true) {
 					Intent intent = new Intent();
 					intent.setClassName("net.fercanet.LNM", "net.fercanet.LNM.MainMenu");
 					startActivity(intent);
@@ -367,7 +413,7 @@ public class Game extends Activity {
 			default:	
 				Button bt = (Button) v;				
 			    String bttext = String.valueOf(bt.getTag());
-			    if ((notes[prevnotenum].equals(bttext+"_1")) || (notes[prevnotenum].equals(bttext+"_2"))){
+			    if ((notes[prevnotenum].equals(bttext+"_0")) || (notes[prevnotenum].equals(bttext+"_1")) || (notes[prevnotenum].equals(bttext+"_2"))){
 					correct++;
 					showNextNote();
 				}

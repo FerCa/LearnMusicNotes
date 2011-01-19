@@ -50,6 +50,7 @@ public class MainMenu extends Activity {
         endgame.setOnClickListener(ClickListener);
     }
     
+    
     // Click listener for the four menu buttons
     OnClickListener ClickListener = new OnClickListener() {
 		@Override

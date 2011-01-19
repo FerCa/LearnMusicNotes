@@ -21,7 +21,6 @@
 package net.fercanet.LNM;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -30,14 +29,16 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.RadioButton;
 import android.widget.Spinner;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemSelectedListener;
-import net.fercanet.*;
+import net.fercanet.LNM.Preferences;
 
 
 public class Settings extends Activity {
 	
-	String hofentries;
+	Preferences prefs;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,49 +47,65 @@ public class Settings extends Activity {
         
         Button endgame = (Button) findViewById(R.id.endgame);
         endgame.setOnClickListener(ClickListener);
-        
-        
-        
-       // Spinner spinner = (Spinner) findViewById(R.id.sphofentries);
-        
-        CustomSpinner spinner = new CustomSpinner(this);
-        
-        spinner = (CustomSpinner) findViewById(R.id.sphofentries);
-        
-     //   Spinner spinner = new Spinner(this);
-        
-     //   spinner = (Spinner) findViewById(R.id.sphofentries);
-        
-           
-        
+              
+        Spinner spinner = (Spinner) findViewById(R.id.sphofentries);
         ArrayAdapter adapter = ArrayAdapter.createFromResource( this, R.array.hofentries_array , android.R.layout.simple_spinner_dropdown_item); adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(ItemSelectedListener);
         
-     //   spinner.setOnItemSelectedListener(ItemSelectedListener);
-     //   spinner.setSelectionByItemId(spinner, 3);
+        RadioButton rbclassic = (RadioButton) findViewById(R.id.rbclassic);
+        RadioButton rbletters = (RadioButton) findViewById(R.id.rbletters);
+        rbclassic.setOnClickListener(RadioListener);
+        rbletters.setOnClickListener(RadioListener);
         
+        prefs = new Preferences(this);             // Instantiating Preferences in prefs global variable
 
-
-
-        
-        
+        spinner.setSelection(prefs.scoresnumpos);
+    
+        if (prefs.notationstyle == "classic") {
+    		rbclassic.setChecked(true);
+    		rbletters.setChecked(false);
+        }
+        else if (prefs.notationstyle == "letters") {
+    		rbclassic.setChecked(false);
+    		rbletters.setChecked(true);
+        }
+             
     }
     
+    // ToFix dirty trick because i can't call Utils.reloadScores directly from the clickListener because the context is not the same.
+    private void reloadScoresCall() {
+    	Utils.reloadScores(this);
+    }
     
     // Click listener for exit button
     OnClickListener ClickListener = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
 			
-			SharedPreferences settings = getPreferences(0);
-		    SharedPreferences.Editor editor = settings.edit();
-		    
-		    Spinner spinner = (Spinner) findViewById(R.id.sphofentries);
-		    spinner.getItemAtPosition(1);
-		    editor.putString("hofentries", hofentries);
+		    reloadScoresCall();
 			
-		    moveTaskToBack(true);
+     	   	Intent intent = new Intent();
+     	   	intent.setClassName("net.fercanet.LNM", "net.fercanet.LNM.MainMenu");
+     	   	startActivity(intent);
 		}
+    };
+    
+    
+    // Click listener for Notation style RadioButtons
+    OnClickListener RadioListener = new OnClickListener() {
+        public void onClick(View v) {
+            RadioButton rb = (RadioButton) v;
+            if (rb.getId() == R.id.rbclassic) {
+            		prefs.notationstyle = "classic";
+            		prefs.SavePreferences();
+            }
+            
+            else if (rb.getId() == R.id.rbletters) {
+            		prefs.notationstyle = "letters";
+            		prefs.SavePreferences();
+            }
+        }
     };
     
     
@@ -97,7 +114,11 @@ public class Settings extends Activity {
 		@Override
 		public void onItemSelected(AdapterView<?> parent, View view, int pos,
 				long id) {
-			hofentries = parent.getItemAtPosition(pos).toString();	
+			Object item = parent.getItemAtPosition(pos);
+			String value = item.toString();
+			prefs.scoresnumpos = pos;
+            prefs.scoresnum = Long.parseLong(value);			
+			prefs.SavePreferences();
 		}
 
 		@Override
