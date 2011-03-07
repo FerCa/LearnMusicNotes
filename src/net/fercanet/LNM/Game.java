@@ -37,8 +37,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.os.Vibrator;
 import android.view.*;
 import android.view.View.OnClickListener;
 import android.widget.*;
@@ -135,6 +137,12 @@ public class Game extends Activity {
     
     // Randomly gets and show the next note
     private void showNextNote() {
+    	try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     	Random randomGen = new Random();
     	int notenum = randomGen.nextInt(17);
     	while (notenum == prevnotenum) { notenum = randomGen.nextInt(12);}
@@ -145,6 +153,7 @@ public class Game extends Activity {
         scoreimg.setImageResource(resid);
         String notebt = note.substring(0, note.length()-2);
         setRedBackgroundToAllBtExceptThis(notebt);
+        Player.play(getBaseContext(), notebt, notes[prevnotenum]);
     }
     
    
@@ -255,11 +264,18 @@ public class Game extends Activity {
 			default:	
 				Button bt = (Button) v;				
 			    String bttext = String.valueOf(bt.getTag());
+			   
+                Player.play(getBaseContext(), bttext, notes[prevnotenum]);
+ 			    
 			    if ((notes[prevnotenum].equals(bttext+"_0")) || (notes[prevnotenum].equals(bttext+"_1")) || (notes[prevnotenum].equals(bttext+"_2"))){
 					correct++;
 					showNextNote();
 				}
 				else {
+					Vibrator vib = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+					// Vibrate for 300 milliseconds
+					vib.vibrate(300);
+
 					fail++;
 				}	
 			}
