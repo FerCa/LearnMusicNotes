@@ -46,8 +46,12 @@ public class Game extends Activity {
 	
 	String notes[]={"sol_0","la_0","si_0","don_1","re_1","mi_1","fa_1","sol_1","la_1","si_1","don_2","re_2","mi_2","fa_2","sol_2","la_2","si_2"};
 	int notesbt[]={R.id.re,R.id.si,R.id.mi,R.id.sol,R.id.don,R.id.fa,R.id.la};
-	String btclassictext[]={"re","si","mi","sol","do","fa","la"};
-	String btlettertext[]={"D","B","E","G","C","F","A"};
+	String btseeuropeantext[]={"re","si","mi","sol","do","fa","la"};
+	String btenglishtext[]={"D","B","E","G","C","F","A"};
+	String btneuropeantext[]={"D","H","E","G","C","F","A"};
+	String btbizantinetext[]={"pa","zo","vu","di","ni","ga","ke"};
+	String btjapanesetext[]={"ロ","ト","ハ","ホ","イ","ニ","ヘ"};
+	String btindiantext[]={"re","ni","ga","pa","sa","ma","dha"};
 	
 	int prevnotenum;
 	int correct, fail;
@@ -94,10 +98,18 @@ public class Game extends Activity {
         for (x=0;x<notesbt.length;x++) {
         	bt = (Button) findViewById(notesbt[x]);
         	Preferences prefs = new Preferences(this);
-        	if (prefs.notationstyle.equals("letters")) {
-        			bt.setText(btlettertext[x]);		
-        	} else if (prefs.notationstyle.equals("classic")) {
-        			bt.setText(btclassictext[x]);
+        	if (prefs.notationstyle.equals("english")) {
+        		bt.setText(btenglishtext[x]);		
+        	} else if (prefs.notationstyle.equals("seeuropean")) {
+        		bt.setText(btseeuropeantext[x]);
+        	} else if (prefs.notationstyle.equals("northeneuropean")) {
+        		bt.setText(btneuropeantext[x]);
+        	} else if (prefs.notationstyle.equals("bizantine")) {
+        		bt.setText(btbizantinetext[x]);
+        	} else if (prefs.notationstyle.equals("japanese")) {
+        		bt.setText(btjapanesetext[x]);
+        	} else if (prefs.notationstyle.equals("indian")) {
+        		bt.setText(btindiantext[x]);
         	}
         	bt.setOnClickListener(ClickListener);
         }

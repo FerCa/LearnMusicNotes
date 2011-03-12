@@ -1,8 +1,6 @@
 package net.fercanet.LNM;
 
-import android.app.Activity;
 import android.content.*;
-import android.content.ContextWrapper;
 
 
 public class Preferences {
@@ -25,7 +23,7 @@ public class Preferences {
 	    SharedPreferences settings = ctx.getSharedPreferences(PREFS_NAME, 0);
 	    scoresnum = settings.getLong("hofentries", 1);                     // Getting number of top scores to store	
 	    scoresnumpos = settings.getInt("hofentriespos", 1);                     // Getting number of top scores to store	
-	    notationstyle = settings.getString("notationstyle", "classic");    // Getting notation style
+	    notationstyle = settings.getString("notationstyle", "seeuropean");    // Getting notation style
 	    informer = settings.getBoolean("informer", true);
 	}
 	

@@ -2,7 +2,6 @@ package net.fercanet.LNM;
 
 import android.content.Context;
 import android.media.MediaPlayer;
-import android.os.Handler;
 
 public class Player {
 	private static MediaPlayer mp = new MediaPlayer();

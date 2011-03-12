@@ -22,7 +22,6 @@ package net.fercanet.LNM;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -31,7 +30,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.Spinner;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemSelectedListener;
 import net.fercanet.LNM.Preferences;
 
@@ -53,10 +51,18 @@ public class Settings extends Activity {
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(ItemSelectedListener);
         
-        RadioButton rbclassic = (RadioButton) findViewById(R.id.rbclassic);
-        RadioButton rbletters = (RadioButton) findViewById(R.id.rbletters);
-        rbclassic.setOnClickListener(RadioListener);
-        rbletters.setOnClickListener(RadioListener);
+        RadioButton rbseeuropean = (RadioButton) findViewById(R.id.rbseeuropean);
+        RadioButton rbenglish = (RadioButton) findViewById(R.id.rbenglish);
+        RadioButton rbnortheneuropean = (RadioButton) findViewById(R.id.rbnortheneuropean);
+        RadioButton rbbizantine = (RadioButton) findViewById(R.id.rbbizantine);
+        RadioButton rbjapanese = (RadioButton) findViewById(R.id.rbjapanese);
+        RadioButton rbindian = (RadioButton) findViewById(R.id.rbindian);
+        rbseeuropean.setOnClickListener(RadioListener);
+        rbenglish.setOnClickListener(RadioListener);
+        rbnortheneuropean.setOnClickListener(RadioListener);
+        rbbizantine.setOnClickListener(RadioListener);
+        rbjapanese.setOnClickListener(RadioListener);
+        rbindian.setOnClickListener(RadioListener);
         
         RadioButton rbinformeryes = (RadioButton) findViewById(R.id.rbyes);
         RadioButton rbinformerno = (RadioButton) findViewById(R.id.rbno);
@@ -67,14 +73,19 @@ public class Settings extends Activity {
 
         spinner.setSelection(prefs.scoresnumpos);
     
-        if (prefs.notationstyle == "classic") {
-    		rbclassic.setChecked(true);
-    		rbletters.setChecked(false);
-        }
-        else if (prefs.notationstyle == "letters") {
-    		rbclassic.setChecked(false);
-    		rbletters.setChecked(true);
-        }
+        rbseeuropean.setChecked(false);
+        rbenglish.setChecked(false);
+        rbnortheneuropean.setChecked(false);
+        rbbizantine.setChecked(false);
+        rbjapanese.setChecked(false);
+        rbindian.setChecked(false);
+        
+        if (prefs.notationstyle.equals("seeuropean")) {rbseeuropean.setChecked(true);}
+        else if (prefs.notationstyle.equals("english")) {rbenglish.setChecked(true);}
+        else if (prefs.notationstyle.equals("northeneuropean")) {rbnortheneuropean.setChecked(true);}
+        else if (prefs.notationstyle.equals("bizantine")) {rbbizantine.setChecked(true);}
+        else if (prefs.notationstyle.equals("japanese")) {rbjapanese.setChecked(true);}
+        else if (prefs.notationstyle.equals("bindian")) {rbindian.setChecked(true);}
         
         if (prefs.informer == true) {
         	rbinformeryes.setChecked(true);
@@ -110,15 +121,13 @@ public class Settings extends Activity {
     OnClickListener RadioListener = new OnClickListener() {
         public void onClick(View v) {
             RadioButton rb = (RadioButton) v;
-            if (rb.getId() == R.id.rbclassic) {
-            		prefs.notationstyle = "classic";
-            		prefs.SavePreferences();
-            }
-            
-            else if (rb.getId() == R.id.rbletters) {
-            		prefs.notationstyle = "letters";
-            		prefs.SavePreferences();
-            }
+            if (rb.getId() == R.id.rbseeuropean) prefs.notationstyle = "seeuropean";
+            else if (rb.getId() == R.id.rbenglish) prefs.notationstyle = "english";
+            else if (rb.getId() == R.id.rbnortheneuropean) prefs.notationstyle = "northeneuropean";
+            else if (rb.getId() == R.id.rbbizantine) prefs.notationstyle = "bizantine";
+            else if (rb.getId() == R.id.rbjapanese) prefs.notationstyle = "japanese";
+            else if (rb.getId() == R.id.rbindian) prefs.notationstyle = "indian";
+            prefs.SavePreferences();
         }
     };
     
