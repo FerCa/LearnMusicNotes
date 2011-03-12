@@ -20,24 +20,16 @@
 
 package net.fercanet.LNM;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.List;
-import java.util.ListIterator;
 import java.util.Random;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.os.Vibrator;
@@ -45,6 +37,7 @@ import android.view.*;
 import android.view.View.OnClickListener;
 import android.widget.*;
 import android.widget.Chronometer.*;
+import android.graphics.Color;
 
 
 
@@ -123,6 +116,7 @@ public class Game extends Activity {
         for (x=0;x<notesbt.length;x++) {
         
         	bt = (Button) findViewById(notesbt[x]);
+        	bt.setTextColor(Color.BLACK);
        
         	note = String.valueOf(bt.getTag());
         	if (note.equals(notebt)) { 
@@ -135,10 +129,13 @@ public class Game extends Activity {
     }
     
     
+     
     // Randomly gets and show the next note
     private void showNextNote() {
     	try {
-			Thread.sleep(1000);
+    		if (omt==false) {
+    			Thread.sleep(1000);
+    		}
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -156,7 +153,7 @@ public class Game extends Activity {
         Player.play(getBaseContext(), notebt, notes[prevnotenum]);
     }
     
-   
+
     
     // ToFix dirty trick because i can't call Utils.saveuserScore directly from public void onclick because the context is no the same.
     public void saveUserScoreCall(Score userscore) {
@@ -264,8 +261,9 @@ public class Game extends Activity {
 			default:	
 				Button bt = (Button) v;				
 			    String bttext = String.valueOf(bt.getTag());
-			   
-                Player.play(getBaseContext(), bttext, notes[prevnotenum]);
+			    if (omt==false){
+			    	Player.play(getBaseContext(), bttext, notes[prevnotenum]);
+			    }
  			    
 			    if ((notes[prevnotenum].equals(bttext+"_0")) || (notes[prevnotenum].equals(bttext+"_1")) || (notes[prevnotenum].equals(bttext+"_2"))){
 					correct++;
@@ -275,8 +273,23 @@ public class Game extends Activity {
 					Vibrator vib = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 					// Vibrate for 300 milliseconds
 					vib.vibrate(300);
-
 					fail++;
+					// In training mode set the correct button text to bold
+					Preferences prefs = new Preferences(getBaseContext());
+					if (omt==false && prefs.informer==true) {
+						String note = notes[prevnotenum];
+						String notebt = note.substring(0, note.length()-2);
+				        for (int x=0;x<notesbt.length;x++) {
+				   
+				        	bt = (Button) findViewById(notesbt[x]);
+				       
+				        	note = String.valueOf(bt.getTag());
+				        	if (note.equals(notebt)) { 
+				        		bt.setTextColor(Color.GREEN);
+				        		
+				        	}
+				        }
+					}
 				}	
 			}
 		}

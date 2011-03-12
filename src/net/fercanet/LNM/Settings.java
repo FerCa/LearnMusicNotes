@@ -58,6 +58,11 @@ public class Settings extends Activity {
         rbclassic.setOnClickListener(RadioListener);
         rbletters.setOnClickListener(RadioListener);
         
+        RadioButton rbinformeryes = (RadioButton) findViewById(R.id.rbyes);
+        RadioButton rbinformerno = (RadioButton) findViewById(R.id.rbno);
+        rbinformeryes.setOnClickListener(RadioListenerInformer);
+        rbinformerno.setOnClickListener(RadioListenerInformer);
+        
         prefs = new Preferences(this);             // Instantiating Preferences in prefs global variable
 
         spinner.setSelection(prefs.scoresnumpos);
@@ -70,8 +75,17 @@ public class Settings extends Activity {
     		rbclassic.setChecked(false);
     		rbletters.setChecked(true);
         }
-             
+        
+        if (prefs.informer == true) {
+        	rbinformeryes.setChecked(true);
+        	rbinformerno.setChecked(false);
+        }
+        else if (prefs.informer == false) {
+        	rbinformeryes.setChecked(false);
+        	rbinformerno.setChecked(true);
+        }
     }
+    
     
     // ToFix dirty trick because i can't call Utils.reloadScores directly from the clickListener because the context is not the same.
     private void reloadScoresCall() {
@@ -127,6 +141,23 @@ public class Settings extends Activity {
 		}
 		
     }; 
+    
+    
+    // Click listener for Notation style RadioButtons
+    OnClickListener RadioListenerInformer = new OnClickListener() {
+        public void onClick(View v) {
+            RadioButton rb = (RadioButton) v;
+            if (rb.getId() == R.id.rbyes) {
+            		prefs.informer = true;
+            		prefs.SavePreferences();
+            }
+            
+            else if (rb.getId() == R.id.rbno) {
+            		prefs.informer = false;
+            		prefs.SavePreferences();
+            }
+        }
+    };
     
     
    

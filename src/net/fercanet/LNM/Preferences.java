@@ -11,6 +11,7 @@ public class Preferences {
 	public long scoresnum;   // scores showed in hall of fame
 	public int scoresnumpos;  // scores num position in spinner 
 	public String notationstyle;   // Notation style (classic / letters)
+	public boolean informer;  // informer in training mode 
 	private Context ctx;
 	
 	// Constructor
@@ -24,7 +25,8 @@ public class Preferences {
 	    SharedPreferences settings = ctx.getSharedPreferences(PREFS_NAME, 0);
 	    scoresnum = settings.getLong("hofentries", 1);                     // Getting number of top scores to store	
 	    scoresnumpos = settings.getInt("hofentriespos", 1);                     // Getting number of top scores to store	
-	    notationstyle = settings.getString("notationstyle", "classic");    // Getting notation style 
+	    notationstyle = settings.getString("notationstyle", "classic");    // Getting notation style
+	    informer = settings.getBoolean("informer", true);
 	}
 	
 	public void SavePreferences() {
@@ -33,6 +35,7 @@ public class Preferences {
 	    editor.putLong("hofentries", scoresnum);
 	    editor.putInt("hofentriespos", scoresnumpos);
 	    editor.putString("notationstyle", notationstyle);
+	    editor.putBoolean("informer", informer);
 	    editor.commit();
 	}
 	

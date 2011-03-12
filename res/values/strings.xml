@@ -34,5 +34,9 @@
         <item id="3">50</item>
         <item id="4">100</item>
     </string-array>
+    <string name="informer">Enable Informer</string>
+    <string name="informertext">Tells you the correct note when you fail in training mode</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
     
 </resources>
